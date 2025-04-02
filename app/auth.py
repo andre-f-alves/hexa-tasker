@@ -34,11 +34,12 @@ def register():
         error = f'User {username} is already exists.'
       
       else:
-        return redirect(url_for('autho.login'))
+        return redirect(url_for('auth.login'))
       
     flash(error)
 
   return render_template('auth/register.html')
+
 
 @bp.route('/login', methods=('GET', 'POST'))
 def login():
@@ -51,7 +52,7 @@ def login():
 
     user = db.execute(
       'SELECT * FROM users WHERE username = ?',
-      (username)
+      (username,)
     ).fetchone()
 
     if user is None:
@@ -70,6 +71,7 @@ def login():
   
   return render_template('auth/login.html')
 
+
 @bp.before_app_request
 def load_logged_in_user():
   user_id = session.get('user_id')
@@ -80,13 +82,15 @@ def load_logged_in_user():
   else:
     g.user = get_db().execute(
       'SELECT * FROM users WHERE id = ?',
-      (user_id)
+      (user_id,)
     ).fetchone()
+
 
 @bp.route('/logout')
 def logout():
   session.clear()
   return redirect(url_for('index'))
+
 
 def login_required(view):
   @functools.wraps(view)

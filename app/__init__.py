@@ -15,6 +15,10 @@ def create_app():
   except OSError:
     pass
   
+  @app.route('/')
+  def index():
+    return 'Hello!'
+
   from . import db
   db.init_app(app)
 
