@@ -2,18 +2,26 @@
 
 {% block title %}Criar conta{% endblock %}
 
+{% block styles %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles/register.css') }}">
+{% endblock %}
+
 {% block body %}
   <main>
     <h1>Criar conta</h1>
 
     <form method="post">
-      <label for="username">Nome de usuário</label>
-      <input type="text" name="username" id="username" required>
+      <div class="form-group">
+        <label for="username">Nome de usuário</label>
+        <input type="text" name="username" id="username" required>
+      </div>
 
-      <label for="password">Senha</label>
-      <input type="password" name="password" id="password" required>
+      <div class="form-group">
+        <label for="password">Senha</label>
+        <input type="password" name="password" id="password" required>
+      </div>
 
-      <button type="submit">Registrar</button>
+      <button type="submit" class="register-button">Criar conta</button>
     </form>
   </main>
 {% endblock %}

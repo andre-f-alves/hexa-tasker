@@ -2,16 +2,28 @@
 
 {% block title %}Entrar{% endblock %}
 
+{% block styles %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles/login.css') }}">
+{% endblock %}
+
 {% block body %}
   <main>
+    <h1>Entrar</h1>
+
     <form method="post">
-      <label for="username">Nome de usuário</label>
-      <input type="text" name="username" id="username">
+      <div class="form-group">
+        <label for="username">Nome de usuário</label>
+        <input type="text" name="username" id="username">
+      </div>
 
-      <label for="password">Senha</label>
-      <input type="password" name="password" id="password">
+      <div class="form-group">
+        <label for="password">Senha</label>
+        <input type="password" name="password" id="password">
+      </div>
 
-      <button type="submit">Entrar</button>
+      <button type="submit" class="login-button">Entrar</button>
+
+      <a href="{{ url_for('auth.register') }}">Criar conta</a>
     </form>
   </main>
 {% endblock %}

@@ -1,0 +1,15 @@
+:root {
+  --color-primary: #fe3600;
+}
+
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+  font-family: sans-serif;
+}
+
+button {
+  all: unset;
+  text-align: center;
+}
