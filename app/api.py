@@ -4,6 +4,24 @@ from .db import get_db, close_db
 
 bp = Blueprint('api', __name__, url_prefix='/api')
 
+@bp.route('/get-tasks', methods=['GET'])
+def get_tasks():
+  db = get_db()
+
+  user_id = session.get('user_id')
+
+  tasks = db.execute(
+    'SELECT * FROM tasks WHERE user_id = ?',
+    (user_id,)
+  ).fetchall()
+
+  close_db()
+
+  task_list = [dict(task) for task in tasks]
+
+  return jsonify({'user_tasks': task_list})
+
+
 @bp.route('/create-task', methods=['POST'])
 def create_task():
   db = get_db()
@@ -24,22 +42,37 @@ def create_task():
   task_id = db_cursor.lastrowid
   close_db()
 
-  return jsonify({'task_id': task_id, 'task': task_name, 'completed': False})
+  return jsonify({'task_id': task_id, 'task': task_name, 'completed': 0})
 
 
-@bp.route('/get-tasks', methods=['GET'])
-def get_tasks():
+@bp.route('/update-task/<int:task_id>', methods=['PATCH'])
+def update_task(task_id):
   db = get_db()
 
-  user_id = session.get('user_id')
+  task = request.get_json()
+  task_completed = task.get('completed')
 
-  tasks = db.execute(
-    'SELECT * FROM tasks WHERE user_id = ?',
-    (user_id,)
-  ).fetchall()
+  db.execute(
+    'UPDATE tasks SET completed = ? WHERE id = ?',
+    (task_completed, task_id)
+  )
+  db.commit()
 
   close_db()
 
-  task_list = [dict(task) for task in tasks]
+  return jsonify({'task_id': task_id, 'completed': task_completed})
 
-  return jsonify({'user_tasks': task_list})
+
+@bp.route('delete-task/<int:task_id>', methods=['DELETE'])
+def delete_task(task_id):
+  db = get_db()
+
+  db.execute(
+    'DELETE FROM tasks WHERE id = ?',
+    (task_id,)
+  )
+  db.commit()
+
+  close_db()
+
+  return jsonify({'task_id': task_id})

@@ -12,6 +12,18 @@
   <form>
     <ul id="task-list">
 
+      <template id="task-template">
+        <li>
+          <input type="checkbox">
+          <span class="task-text">Tarefa</span>
+          <span>
+            <button type="button">Editar</button>
+            <button type="button">Marcar como concluída</button>
+            <button type="button" class="delete-button">Excluir</button>
+          </span>
+        </li>
+      </template>
+
     </ul>
   </form>
 
@@ -20,6 +32,6 @@
     <button type="submit" id="new-task-button">+</button>
   </form>
 
-  <script src="static/scripts/main.js"></script>
+  <script type="module" src="static/scripts/main.js"></script>
 </body>
 </html>
