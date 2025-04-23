@@ -21,8 +21,11 @@ def create_app():
   from . import auth
   app.register_blueprint(auth.bp)
 
-  from . import tasks
-  app.register_blueprint(tasks.bp)
+  from . import api
+  app.register_blueprint(api.bp)
+
+  from . import main
+  app.register_blueprint(main.bp)
   app.add_url_rule('/', endpoint='index')
 
   return app
