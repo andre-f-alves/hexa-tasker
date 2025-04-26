@@ -63,6 +63,24 @@ def update_task(task_id):
   return jsonify({'task_id': task_id, 'completed': task_completed})
 
 
+@bp.route('/edit-task/<int:task_id>', methods=['PATCH'])
+def edit_task(task_id):
+  db = get_db()
+
+  task = request.get_json()
+  task_text = task.get('task')
+
+  db.execute(
+    'UPDATE tasks SET task = ? WHERE id = ?',
+    (task_text, task_id)
+  )
+  db.commit()
+
+  close_db()
+  
+  return jsonify({'task_id': task_id, 'task': task_text})
+
+
 @bp.route('delete-task/<int:task_id>', methods=['DELETE'])
 def delete_task(task_id):
   db = get_db()

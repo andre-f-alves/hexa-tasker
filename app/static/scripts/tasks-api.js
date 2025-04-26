@@ -1,4 +1,4 @@
-async function getUserTasks() {
+async function getTasks() {
   const res = await fetch('api/get-tasks')
     .then(res => res.json())
 
@@ -31,6 +31,19 @@ async function updateTask(taskId, completed) {
   return res
 }
 
+async function editTask(taskId, task) {
+  const res = await fetch(`api/edit-task/${taskId}`, {
+    method: 'PATCH',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({'task': task})
+  })
+    .then(res => res.json())
+
+  return res
+}
+
 async function deleteTask(taskId) {
   const res = await fetch(`api/delete-task/${taskId}`, {
     method: 'DELETE',
@@ -43,4 +56,4 @@ async function deleteTask(taskId) {
   return res
 }
 
-export { getUserTasks, createTask, updateTask, deleteTask }
+export { getTasks, createTask, updateTask, editTask, deleteTask }

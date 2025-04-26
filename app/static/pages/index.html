@@ -5,23 +5,38 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Hexa Tasker</title>
   <link rel="icon" href="static/favicon.ico" type="image/x-icon">
+  <link rel="stylesheet" href="static/styles/user-page.css">
 </head>
 <body>
   <h1>Lista de Tarefas</h1>
 
-  <form>
+  <form id="task-list-form">
     <ul id="task-list">
 
-      <template id="task-template">
-        <li>
-          <input type="checkbox">
-          <span class="task-text">Tarefa</span>
-          <span>
-            <button type="button">Editar</button>
-            <button type="button">Marcar como concluída</button>
-            <button type="button" class="delete-button">Excluir</button>
+      <template id="task-list-item-template">
+        <li class="task-list-item">
+          <span class="task-wrapper">
+            <input type="checkbox" class="task-checkbox">
+          
+            <span class="task-text"></span>
+
+            <span class="task-actions">
+              <button type="button" class="edit-task-button">Editar</button>
+              <button type="button" class="check-task-button">Marcar como concluída</button>
+              <button type="button" class="delete-task-button">Excluir</button>
+            </span>
           </span>
         </li>
+      </template>
+
+      <template id="task-editor-template">
+        <span class="task-editor">
+          <input type="text" placeholder="Digite sua tarefa" class="task-editor-input">
+          <span>
+            <button type="button" class="cancel-button">Cancelar</button>
+            <button type="submit" class="save-button">Salvar</button>
+          </span>
+        </span>
       </template>
 
     </ul>
