@@ -16,14 +16,14 @@
       <template id="task-list-item-template">
         <li class="task-list-item">
           <span class="task-wrapper">
-            <input type="checkbox" class="task-checkbox">
+            <input type="checkbox" data-action="update-task" class="task-checkbox">
           
             <span class="task-text"></span>
 
             <span class="task-actions">
-              <button type="button" class="edit-task-button">Editar</button>
-              <button type="button" class="check-task-button">Marcar como concluída</button>
-              <button type="button" class="delete-task-button">Excluir</button>
+              <button type="button" data-action="open-editor" class="edit-task-button">Editar</button>
+              <button type="button" data-action="update-task" class="check-task-button">Marcar como concluída</button>
+              <button type="button" data-action="delete-task" class="delete-task-button">Excluir</button>
             </span>
           </span>
         </li>
@@ -33,8 +33,8 @@
         <span class="task-editor">
           <input type="text" placeholder="Digite sua tarefa" class="task-editor-input">
           <span>
-            <button type="button" class="cancel-button">Cancelar</button>
-            <button type="submit" class="save-button">Salvar</button>
+            <button type="button" data-action="close-editor" class="cancel-button">Cancelar</button>
+            <button type="submit" data-action="save" class="save-button">Salvar</button>
           </span>
         </span>
       </template>

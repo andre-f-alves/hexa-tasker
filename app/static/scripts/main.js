@@ -1,10 +1,11 @@
 import {
   getTasks,
   createTask,
-  updateTask,
-  editTask,
-  deleteTask
 } from './tasks-api.js'
+
+import { getTemplateContent } from './utils.js'
+
+import TaskHandler from './task-handler.js'
 
 (async function() {
   const res = await getTasks()
@@ -21,6 +22,8 @@ function addTask(task, taskId, completed=0) {
 
   const taskListItem = getTemplateContent('task-list-item-template', '.task-list-item')
 
+  new TaskHandler(taskListItem)
+
   const taskText = taskListItem.querySelector('.task-text')
   const taskCheckbox = taskListItem.querySelector('.task-checkbox')
   const taskEditButton = taskListItem.querySelector('.edit-task-button')
@@ -32,7 +35,6 @@ function addTask(task, taskId, completed=0) {
   taskText.textContent = task
 
   taskCheckbox.dataset.taskId = taskId
-  taskCheckbox.addEventListener('change', async (event) => handleTaskUpdate(event.target))
 
   if (completed) {
     taskCheckbox.setAttribute('checked', '')
@@ -44,13 +46,10 @@ function addTask(task, taskId, completed=0) {
   }
 
   checkTaskButton.dataset.taskId = taskId
-  checkTaskButton.addEventListener('click', () => taskCheckbox.click())
 
   taskEditButton.dataset.taskId = taskId
-  taskEditButton.addEventListener('click', (event) => handleTaskEditing(event.target))
 
   taskDeleteButton.dataset.taskId = taskId
-  taskDeleteButton.addEventListener('click', async (event) => handleTaskDeletion(event.target))
 
   taskList.appendChild(taskListItem)
 }
@@ -67,71 +66,4 @@ async function handleTaskSubmit(event) {
 
   taskInput.value = ''
   addTask(res['task'], res['task_id'])
-}
-
-async function handleTaskUpdate(element) {
-  const { taskId } = element.dataset
-  const completed = Number(element.checked)
-
-  const checkTaskButton = document.querySelector(`.check-task-button[data-task-id="${taskId}"]`)
-
-  await updateTask(taskId, completed)
-
-  if (completed) {
-    element.setAttribute('checked', '')
-    checkTaskButton.textContent = 'Desmarcar'
-
-  } else {
-    element.removeAttribute('checked')
-    checkTaskButton.textContent = 'Marcar como concluída'
-  }
-}
-
-function handleTaskEditing(element) {
-  const { taskId } = element.dataset
-
-  const taskEditor = getTemplateContent('task-editor-template', '.task-editor')
-  const taskEditorInput = taskEditor.querySelector('.task-editor-input')
-
-  const taskListItem = document.getElementById(`task-list-item-${taskId}`)
-
-  taskListItem.querySelector('.task-wrapper').classList.add('hidden')
-
-  taskListItem.appendChild(taskEditor)
-
-  taskEditorInput.value = taskListItem.querySelector('.task-text').textContent
-  taskEditorInput.select()
-  taskEditorInput.focus()
-
-  taskEditor.querySelector('.cancel-button').addEventListener('click', () => {
-    taskListItem.querySelector('.task-wrapper').classList.remove('hidden')
-    taskEditor.remove()
-  })
-
-  taskEditor.querySelector('.save-button').addEventListener('click', async (event) => {
-    event.preventDefault()
-    const task = taskEditorInput.value
-
-    const res = await editTask(taskId, task)
-
-    console.log(res)
-
-    taskListItem.querySelector('.task-wrapper').classList.remove('hidden')
-    taskListItem.querySelector('.task-text').textContent = res['task']
-    taskEditor.remove()
-  })
-}
-
-async function handleTaskDeletion(element) {
-  const { taskId } = element.dataset
-
-  await deleteTask(taskId)
-
-  document.getElementById(`task-list-item-${taskId}`).remove()
-}
-
-function getTemplateContent(templateId, content) {
-  const template = document.getElementById(templateId)
-  const templateContent = template.content.cloneNode(true)
-  return templateContent.querySelector(content)
 }
