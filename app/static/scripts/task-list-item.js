@@ -6,11 +6,34 @@ import {
 
 import { getTemplateContent } from './utils.js'
 
-export default class TaskHandler {
-  constructor(element) {
-    this.element = element
-    element.onclick = this.handleClick.bind(this)
-    element.onchange = this.handleChange.bind(this)
+export default class TaskListItem {
+  constructor(task, taskId, completed) {
+    this.element = getTemplateContent('task-list-item-template', '.task-list-item')
+    this.element.setAttribute('id', `task-list-item-${taskId}`)
+    this.element.onclick = this.handleClick.bind(this)
+    this.element.onchange = this.handleChange.bind(this)
+
+    this.taskWrapper = this.element.querySelector('.task-wrapper')
+    
+    this.taskCheckbox = this.element.querySelector('.task-checkbox')
+    this.taskCheckbox.dataset.taskId = taskId
+
+    if (completed) {
+      this.taskCheckbox.setAttribute('checked', '')
+    } else {
+      this.taskCheckbox.removeAttribute('checked')
+    }
+
+    this.taskEditorButton = this.element.querySelector('.edit-task-button')
+    this.taskEditorButton.dataset.taskId = taskId
+    
+    this.taskDeleteButton = this.element.querySelector('.delete-task-button')
+    this.taskDeleteButton.dataset.taskId = taskId
+    
+    this.taskText = this.element.querySelector('.task-text')
+    this.taskText.textContent = task
+
+    return this.element
   }
 
   async updateTask(target) {
@@ -30,20 +53,20 @@ export default class TaskHandler {
     const { taskId } = target.dataset
     const taskEditor = getTemplateContent('task-editor-template', '.task-editor')
     const taskEditorInput = taskEditor.querySelector('.task-editor-input')
+    const saveButton = taskEditor.querySelector('.save-button')
 
-    this.element.querySelector('.task-wrapper').classList.add('hidden')
+    this.taskWrapper.classList.add('hidden')
     this.element.appendChild(taskEditor)
 
-    const saveButton = taskEditor.querySelector('.save-button')
     saveButton.dataset.taskId = taskId
 
-    taskEditorInput.value = this.element.querySelector('.task-text').textContent
+    taskEditorInput.value = this.taskText.textContent
     taskEditorInput.select()
     taskEditorInput.focus()
   }
 
   closeEditor() {
-    this.element.querySelector('.task-wrapper').classList.remove('hidden')
+    this.taskWrapper.classList.remove('hidden')
     this.element.querySelector('.task-editor').remove()
   }
 
@@ -53,7 +76,7 @@ export default class TaskHandler {
     const task = taskEditorInput.value
 
     const res = await editTask(taskId, task)
-    this.element.querySelector('.task-text').textContent = res['task']
+    this.taskText.textContent = res['task']
 
     this.closeEditor()
   }
@@ -65,10 +88,7 @@ export default class TaskHandler {
   }
 
   parseAction(action) {
-    const splitted = action.split('-')
-    if (splitted.length === 1) return action
-    const parsed = splitted[1].replace(/^\w/, (char) => char.toUpperCase())
-    return splitted[0] + parsed
+    return action.replace(/-\w/, (str) => str[1].toUpperCase())
   }
 
   handleClick(event) {
