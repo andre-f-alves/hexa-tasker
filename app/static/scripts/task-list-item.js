@@ -8,15 +8,16 @@ import { getTemplateContent } from './utils.js'
 
 export default class TaskListItem {
   constructor(task, taskId, completed) {
+    this.taskId = taskId
+    
     this.element = getTemplateContent('task-list-item-template', '.task-list-item')
-    this.element.setAttribute('id', `task-list-item-${taskId}`)
+    this.element.setAttribute('id', `task-${this.taskId}`)
     this.element.onclick = this.handleClick.bind(this)
     this.element.onchange = this.handleChange.bind(this)
 
     this.taskWrapper = this.element.querySelector('.task-wrapper')
     
     this.taskCheckbox = this.element.querySelector('.task-checkbox')
-    this.taskCheckbox.dataset.taskId = taskId
 
     if (completed) {
       this.taskCheckbox.setAttribute('checked', '')
@@ -25,10 +26,8 @@ export default class TaskListItem {
     }
 
     this.taskEditorButton = this.element.querySelector('.edit-task-button')
-    this.taskEditorButton.dataset.taskId = taskId
     
     this.taskDeleteButton = this.element.querySelector('.delete-task-button')
-    this.taskDeleteButton.dataset.taskId = taskId
     
     this.taskText = this.element.querySelector('.task-text')
     this.taskText.textContent = task
@@ -37,10 +36,9 @@ export default class TaskListItem {
   }
 
   async updateTask(target) {
-    const { taskId } = target.dataset
     const completed = Number(target.checked)
 
-    await updateTask(taskId, completed)
+    await updateTask(this.taskId, completed)
 
     if (completed) {
       target.setAttribute('checked', '')
@@ -49,16 +47,28 @@ export default class TaskListItem {
     }
   }
 
-  openEditor(target) {
-    const { taskId } = target.dataset
+  openEditor() {
+    if (this.element.querySelector('.task-editor')) return
+
+    if (document.querySelector('.task-editor')) {
+      document.querySelector('.task-wrapper.hidden').classList.remove('hidden')
+      document.querySelector('.task-editor').remove()
+    }
+
     const taskEditor = getTemplateContent('task-editor-template', '.task-editor')
     const taskEditorInput = taskEditor.querySelector('.task-editor-input')
-    const saveButton = taskEditor.querySelector('.save-button')
 
     this.taskWrapper.classList.add('hidden')
     this.element.appendChild(taskEditor)
 
-    saveButton.dataset.taskId = taskId
+    document.onclick = (event) => {
+      if (
+        !this.element.contains(event.target) &&
+        this.element.querySelector('.task-editor')
+      ) {
+        this.closeEditor()
+      }
+    }
 
     taskEditorInput.value = this.taskText.textContent
     taskEditorInput.select()
@@ -68,22 +78,22 @@ export default class TaskListItem {
   closeEditor() {
     this.taskWrapper.classList.remove('hidden')
     this.element.querySelector('.task-editor').remove()
+
+    if (document.onclick) document.onclick = null
   }
 
-  async save(target) {
-    const { taskId } = target.dataset
+  async save() {
     const taskEditorInput = this.element.querySelector('.task-editor-input')
     const task = taskEditorInput.value
 
-    const res = await editTask(taskId, task)
+    const res = await editTask(this.taskId, task)
     this.taskText.textContent = res['task']
 
     this.closeEditor()
   }
 
-  async deleteTask(target) {
-    const { taskId } = target.dataset
-    await deleteTask(taskId)
+  async deleteTask() {
+    await deleteTask(this.taskId)
     this.element.remove()
   }
 

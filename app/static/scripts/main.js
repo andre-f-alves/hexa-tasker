@@ -5,21 +5,19 @@ import {
 
 import TaskListItem from './task-list-item.js'
 
-(async function() {
+(async function () {
   const res = await getTasks()
   
-  for (const task of res['user_tasks']) {
-    addTask(task['task'], task['id'], task['completed'])
-  }
+  res['user_tasks'].forEach((task) => addTask(task['task'], task['id'], task['completed']))
 })()
-
-const newTaskForm = document.getElementById('new-task-form')
 
 function addTask(task, taskId, completed=0) {
   const taskList = document.getElementById('task-list')
   const taskListItem = new TaskListItem(task, taskId, completed)
   taskList.appendChild(taskListItem)
 }
+
+const newTaskForm = document.getElementById('new-task-form')
 
 newTaskForm.addEventListener('submit', async (event) => handleTaskSubmit(event))
 
