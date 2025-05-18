@@ -35,15 +35,15 @@ export default class TaskListItem {
     return this.element
   }
 
-  async updateTask(target) {
-    const completed = Number(target.checked)
+  async updateTask() {
+    const completed = this.taskCheckbox.checked
 
     await updateTask(this.taskId, completed)
 
     if (completed) {
-      target.setAttribute('checked', '')
+      this.taskCheckbox.setAttribute('checked', '')
     } else {
-      target.removeAttribute('checked')
+      this.taskCheckbox.removeAttribute('checked')
     }
   }
 
@@ -112,7 +112,7 @@ export default class TaskListItem {
     const method = this.parseAction(action)
     if (!this[method]) return
     
-    this[method](event.target)
+    this[method]()
   }
 
   handleChange(event) {

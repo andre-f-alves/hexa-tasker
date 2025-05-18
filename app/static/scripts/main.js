@@ -11,7 +11,7 @@ import TaskListItem from './task-list-item.js'
   res['user_tasks'].forEach((task) => addTask(task['task'], task['id'], task['completed']))
 })()
 
-function addTask(task, taskId, completed=0) {
+function addTask(task, taskId, completed=false) {
   const taskList = document.getElementById('task-list')
   const taskListItem = new TaskListItem(task, taskId, completed)
   taskList.appendChild(taskListItem)

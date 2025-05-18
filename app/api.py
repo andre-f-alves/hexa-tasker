@@ -1,5 +1,4 @@
 from flask import Blueprint, request, session, jsonify
-
 from .db import get_db, close_db
 
 bp = Blueprint('api', __name__, url_prefix='/api')
@@ -10,14 +9,14 @@ def get_tasks():
 
   user_id = session.get('user_id')
 
-  tasks = db.execute(
+  db_rows = db.execute(
     'SELECT * FROM tasks WHERE user_id = ?',
     (user_id,)
   ).fetchall()
 
   close_db()
 
-  task_list = [dict(task) for task in tasks]
+  task_list = [{**dict(row), 'completed': bool(row['completed'])} for row in db_rows]
 
   return jsonify({'user_tasks': task_list})
 
@@ -42,7 +41,7 @@ def create_task():
   task_id = db_cursor.lastrowid
   close_db()
 
-  return jsonify({'task_id': task_id, 'task': task_name, 'completed': 0})
+  return jsonify({'task_id': task_id, 'task': task_name, 'completed': True})
 
 
 @bp.route('/update-task/<int:task_id>', methods=['PATCH'])

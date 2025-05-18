@@ -10,17 +10,17 @@ bp = Blueprint('auth', __name__, url_prefix='/auth')
 @bp.route('/register', methods=['GET', 'POST'])
 def register():
   if request.method == 'POST':
-    username = request.form['username']
-    password = request.form['password']
+    username = request.form['username'].strip()
+    password = request.form['password'].strip()
 
     db = get_db()
     error = None
 
     if not username:
-      error = 'Username is required.'
+      error = {'username': 'Nome de usuário não informado.'}
     
     elif not password:
-      error = 'Password is required.'
+      error = {'password': 'Senha não informada.'}
 
     if error is None:
       try:
@@ -31,43 +31,51 @@ def register():
         db.commit()
       
       except db.IntegrityError:
-        error = f'User {username} is already exists.'
+        error = {'username': f'O nome de usuário "{username}" já existe.'}
       
       else:
         return redirect(url_for('auth.login'))
       
-    flash(error)
-
+    return render_template('auth/register.html', error=error)
+      
   return render_template('auth/register.html')
 
 
 @bp.route('/login', methods=['GET', 'POST'])
 def login():
   if request.method == 'POST':
-    username = request.form['username']
-    password = request.form['password']
+    username = request.form['username'].strip()
+    password = request.form['password'].strip()
 
     db = get_db()
     error = None
 
-    user = db.execute(
-      'SELECT * FROM users WHERE username = ?',
-      (username,)
-    ).fetchone()
+    if not username or not password:
+      if not username:
+        error = {'username': 'Nome de usuário não informado.'}
 
-    if user is None:
-      error = 'Incorrect username.'
-    
-    elif not check_password_hash(user['password'], password):
-      error = 'Incorrect password.'
-    
-    if error is None:
-      session.clear()
-      session['user_id'] = user['id']
+      if not password:
+        error = {'password': 'Senha não informada.'}
 
-      return redirect(url_for('index'))
+    else:
+      user = db.execute(
+        'SELECT * FROM users WHERE username = ?',
+        (username,)
+      ).fetchone()
+
+      if user is None:
+        error = {'username': 'Usuário não encontrado.'}
+      
+      elif not check_password_hash(user['password'], password):
+        error = {'password': 'Senha incorreta.'}
+      
+      if error is None:
+        session.clear()
+        session['user_id'] = user['id']
+
+        return redirect(url_for('index'))
     
-    flash(error)
+    return render_template('auth/login.html', error=error)
   
   return render_template('auth/login.html')
 
