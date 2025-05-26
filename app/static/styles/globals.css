@@ -1,5 +1,6 @@
 :root {
-  --color-primary: #fe3600;
+  --primary-color: #fe3600;
+  --error-color: #ff3737;
 }
 
 * {

@@ -3,7 +3,7 @@
 {% block title %}Entrar{% endblock %}
 
 {% block styles %}
-  <link rel="stylesheet" href="{{ url_for('static', filename='styles/login.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles/auth-form.css') }}">
 {% endblock %}
 
 {% block body %}
@@ -13,17 +13,31 @@
     <form method="post">
       <div class="form-group">
         <label for="username">Nome de usuário</label>
-        <input type="text" name="username" id="username" placeholder="{{ error['username'] if error and error['username'] else 'Informe seu nome de usuário' }}" required>
+        <input type="text" name="username" id="username" placeholder="Informe seu nome de usuário" required>
+
+        {% if error and error['username'] %}
+          <div class="error-message-wrapper">
+            <span class="error-icon-wrapper">{{ error_icon | safe }}</span>
+            <span class="error-message">{{ error['username'] }}</span>
+          </div>
+        {% endif %}
       </div>
 
       <div class="form-group">
         <label for="password">Senha</label>
-        <input type="password" name="password" id="password" placeholder="{{ error['password'] if error and error['password'] else 'Informe sua senha' }}" required>
+        <input type="password" name="password" id="password" placeholder="Informe sua senha" required>
+
+        {% if error and error['password'] %}
+          <div class="error-message-wrapper">
+            <span class="error-icon-wrapper">{{ error_icon | safe }}</span>
+            <span class="error-message">{{ error['password'] }}</span>
+          </div>
+        {% endif %}
       </div>
 
       <button type="submit" class="login-button">Entrar</button>
 
-      <a href="{{ url_for('auth.register') }}">Criar conta</a>
+      <a href="{{ url_for('auth.register') }}" class="link-button">Criar conta</a>
     </form>
   </main>
 {% endblock %}

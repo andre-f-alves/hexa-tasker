@@ -1,6 +1,6 @@
 import functools
 
-from flask import Blueprint, flash, g, redirect, render_template, request, session, url_for
+from flask import Blueprint, g, redirect, render_template, request, session, url_for, send_file
 from werkzeug.security import check_password_hash, generate_password_hash
 
 from app.db import get_db
@@ -16,11 +16,14 @@ def register():
     db = get_db()
     error = None
 
-    if not username:
-      error = {'username': 'Nome de usuário não informado.'}
-    
-    elif not password:
-      error = {'password': 'Senha não informada.'}
+    if not username or not password:
+      error = {}
+
+      if not username:
+        error['username'] = 'Nome de usuário não informado.'
+      
+      if not password:
+        error['password'] = 'Senha não informada.'
 
     if error is None:
       try:
@@ -36,7 +39,10 @@ def register():
       else:
         return redirect(url_for('auth.login'))
       
-    return render_template('auth/register.html', error=error)
+    with open('app/static/icons/error-icon.svg') as f:
+      error_icon = f.read()
+      
+    return render_template('auth/register.html', error=error, error_icon=error_icon)
       
   return render_template('auth/register.html')
 
@@ -51,11 +57,13 @@ def login():
     error = None
 
     if not username or not password:
+      error = {}
+
       if not username:
-        error = {'username': 'Nome de usuário não informado.'}
+        error['username'] = 'Nome de usuário não informado.'
 
       if not password:
-        error = {'password': 'Senha não informada.'}
+        error['password'] = 'Senha não informada.'
 
     else:
       user = db.execute(
@@ -75,7 +83,10 @@ def login():
 
         return redirect(url_for('index'))
     
-    return render_template('auth/login.html', error=error)
+    with open('app/static/icons/error-icon.svg') as f:
+      error_icon = f.read()
+
+    return render_template('auth/login.html', error=error, error_icon=error_icon)
   
   return render_template('auth/login.html')
 

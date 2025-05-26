@@ -1,0 +1,82 @@
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100dvh;
+  width: 100dvw;
+}
+
+h1 {
+  margin-bottom: 10px;
+  font-size: 1.7em;
+  text-align: center;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  height: 250px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group label {
+  margin-bottom: 5px;
+}
+
+.form-group input {
+  padding: 10px;
+  border: 1px solid black;
+  border-radius: 7px;
+}
+
+.form-group input:focus {
+  outline: none;
+  border: 1px solid var(--primary-color);
+}
+
+.form-group:has(.error-message-wrapper) input {
+  border: 1px solid var(--error-color);
+}
+
+.error-message-wrapper {
+  display: grid;
+  grid-template: auto / auto 1fr;
+  gap: 5px;
+  align-items: center;
+  margin-top: 5px;
+  font-size: .8em;
+  color: var(--error-color);
+}
+
+.error-icon-wrapper {
+  line-height: 0;
+}
+
+.error-icon-wrapper > svg {
+  width: 16px;
+  height: 16px;
+  fill: var(--error-color);
+}
+
+button[type="submit"] {
+  padding: 10px;
+  border-radius: 7px;
+  background-color: var(--primary-color);
+  color: white;
+  cursor: pointer;
+}
+
+.link-button {
+  padding: 10px;
+  border: 1px solid var(--primary-color);
+  border-radius: 7px;
+  text-align: center;
+  text-decoration: none;
+  background-color: white;
+  color: var(--primary-color);
+}
