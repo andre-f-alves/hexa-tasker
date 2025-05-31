@@ -10,40 +10,40 @@
 <body>
   <h1>Lista de Tarefas</h1>
 
-  <form id="task-list-form">
-    <ul id="task-list">
+  <ul id="task-list">
 
-      <template id="task-list-item-template">
-        <li class="task-list-item">
-          <span class="task-wrapper">
-            <input type="checkbox" data-action="update-task" class="task-checkbox">
-          
-            <span class="task-text"></span>
+    <template id="task-list-item-template">
+      <li class="task-list-item">
+        <span class="task-wrapper">
+          <input type="checkbox" data-action="update-task" class="task-checkbox">
+        
+          <span class="task-text"></span>
 
-            <span class="task-actions">
-              <button type="button" data-action="open-editor" class="edit-task-button">Editar</button>
-              <button type="button" data-action="delete-task" class="delete-task-button">Excluir</button>
-            </span>
+          <span class="task-actions">
+            <button type="button" data-action="open-editor" class="edit-task-button">Editar</button>
+            <button type="button" data-action="delete-task" class="delete-task-button">Excluir</button>
           </span>
-        </li>
-      </template>
+        </span>
+      </li>
+    </template>
 
-      <template id="task-editor-template">
-        <span class="task-editor">
-          <input type="text" placeholder="Digite sua tarefa" class="task-editor-input">
+    <template id="task-editor-template">
+      <span class="task-editor">
+        <form class="task-editor-form">
+          <input type="text" name="task-text" id="task-editor-input" placeholder="Digite sua tarefa" class="task-editor-input">
           <span>
             <button type="button" data-action="close-editor" class="cancel-button">Cancelar</button>
             <button type="submit" data-action="save" class="save-button">Salvar</button>
           </span>
-        </span>
-      </template>
+        </form>
+      </span>
+    </template>
 
-    </ul>
-  </form>
+  </ul>
 
   <form id="new-task-form">
-    <input type="text" name="new-task-input" id="new-task-input" placeholder="Digite uma tarefa">
-    <button type="submit" id="new-task-button">+</button>
+    <input type="text" name="new-task" id="new-task-input" placeholder="Digite uma tarefa">
+    <button type="submit" id="submit-task" disabled>+</button>
   </form>
 
   <script type="module" src="static/scripts/main.js"></script>

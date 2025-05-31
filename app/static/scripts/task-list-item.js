@@ -70,6 +70,11 @@ export default class TaskListItem {
       }
     }
 
+    taskEditorInput.addEventListener('input', (event) => {
+      const task = event.target.value.trim()
+      taskEditor.querySelector('.save-button').disabled = !task
+    })
+
     taskEditorInput.value = this.taskText.textContent
     taskEditorInput.select()
     taskEditorInput.focus()
@@ -84,10 +89,17 @@ export default class TaskListItem {
 
   async save() {
     const taskEditorInput = this.element.querySelector('.task-editor-input')
-    const task = taskEditorInput.value
+    const task = taskEditorInput.value.trim()
 
-    const res = await editTask(this.taskId, task)
-    this.taskText.textContent = res['task']
+    const { resFulfilled, resData } = await editTask(this.taskId, task)
+
+    if (!resFulfilled) {
+      alert('Erro: ' + resData['error'])
+      taskEditorInput.focus()
+      return
+    }
+
+    this.taskText.textContent = resData['task']
 
     this.closeEditor()
   }
@@ -117,8 +129,10 @@ export default class TaskListItem {
 
   handleChange(event) {
     if (event.target.type !== 'checkbox') return
+    
     const { action } = event.target.dataset
     if (!action) return
+
     const method = this.parseAction(action)
     this[method](event.target)
   }

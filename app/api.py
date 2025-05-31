@@ -18,7 +18,7 @@ def get_tasks():
 
   task_list = [{**dict(row), 'completed': bool(row['completed'])} for row in db_rows]
 
-  return jsonify({'user_tasks': task_list})
+  return jsonify({'user_tasks': task_list}), 200
 
 
 @bp.route('/create-task', methods=['POST'])
@@ -26,7 +26,10 @@ def create_task():
   db = get_db()
 
   task = request.get_json()
-  task_name = task.get('task')
+  task_name = task.get('task').strip()
+
+  if not task_name:
+    return jsonify({'error': 'O texto da tarefa não pode estar em branco'}), 400
 
   user_id = session.get('user_id')
 
@@ -41,7 +44,7 @@ def create_task():
   task_id = db_cursor.lastrowid
   close_db()
 
-  return jsonify({'task_id': task_id, 'task': task_name, 'completed': True})
+  return jsonify({'task_id': task_id, 'task': task_name, 'completed': True}), 201
 
 
 @bp.route('/update-task/<int:task_id>', methods=['PATCH'])
@@ -59,7 +62,7 @@ def update_task(task_id):
 
   close_db()
 
-  return jsonify({'task_id': task_id, 'completed': task_completed})
+  return jsonify({'task_id': task_id, 'completed': task_completed}), 200
 
 
 @bp.route('/edit-task/<int:task_id>', methods=['PATCH'])
@@ -67,7 +70,10 @@ def edit_task(task_id):
   db = get_db()
 
   task = request.get_json()
-  task_text = task.get('task')
+  task_text = task.get('task').strip()
+
+  if not task_text:
+    return jsonify({'error': 'O texto da tarefa não pode estar em branco'}), 400
 
   db.execute(
     'UPDATE tasks SET task = ? WHERE id = ?',
@@ -77,7 +83,7 @@ def edit_task(task_id):
 
   close_db()
   
-  return jsonify({'task_id': task_id, 'task': task_text})
+  return jsonify({'task_id': task_id, 'task': task_text}), 200
 
 
 @bp.route('delete-task/<int:task_id>', methods=['DELETE'])
@@ -92,4 +98,4 @@ def delete_task(task_id):
 
   close_db()
 
-  return jsonify({'task_id': task_id})
+  return '', 204

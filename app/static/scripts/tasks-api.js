@@ -1,59 +1,85 @@
 async function getTasks() {
-  const res = await fetch('api/get-tasks')
-    .then(res => res.json())
-
-  return res
+  try {
+    const res = await fetch('api/get-tasks')
+    return await res.json()
+  
+  } catch (error) {
+    console.error('Error fetching tasks:', error)
+    return { 'error': 'Falha ao buscar as tarefas.' }
+  }
 }
 
 async function createTask(task) {
-  const res = await fetch('api/create-task', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({'task': task})
-  })
-    .then(res => res.json())
+  try {
+    const res = await fetch('api/create-task', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({'task': task})
+    })
 
-  return res
+    const data = await res.json()
+    
+    return { resFulfilled: res.ok, resStatus: res.status, resData: data }
+
+  } catch (error) {
+    console.error('Error creating task:', error)
+    return { 'error': 'Falha ao criar a tarefa.' }
+  }
 }
 
 async function updateTask(taskId, completed) {
-  const res = await fetch(`api/update-task/${taskId}`, {
-    method: 'PATCH',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({'completed': completed})
-  })
-    .then(res => res.json())
+  try {
+    const res = await fetch(`api/update-task/${taskId}`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({'completed': completed})
+    })
 
-  return res
+    return await res.json()
+
+  } catch (error) {
+    console.error('Error updating task:', error)
+    return { 'error': 'Falha ao atualizar a tarefa.' }
+  }
 }
 
 async function editTask(taskId, task) {
-  const res = await fetch(`api/edit-task/${taskId}`, {
-    method: 'PATCH',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({'task': task})
-  })
-    .then(res => res.json())
+  try {
+    const res = await fetch(`api/edit-task/${taskId}`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({'task': task})
+    })
 
-  return res
+    const data = await res.json()
+
+    return { resFulfilled: res.ok, resStatus: res.status, resData: data }
+
+  } catch (error) {
+    console.error('Error editing task:', error)
+    return { 'error': 'Falha ao editar a tarefa.' }
+  }
 }
 
 async function deleteTask(taskId) {
-  const res = await fetch(`api/delete-task/${taskId}`, {
-    method: 'DELETE',
-    headers: {
-      'Content-Type': 'application/json'
-    }
-  })
-    .then(res => res.json())
+  try {
+    await fetch(`api/delete-task/${taskId}`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
   
-  return res
+  } catch (error) {
+    console.error('Error deleting task:', error)
+    alert('Falha ao excluir a tarefa.')
+  }
 }
 
 export { getTasks, createTask, updateTask, editTask, deleteTask }
