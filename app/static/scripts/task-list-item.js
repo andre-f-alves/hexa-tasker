@@ -18,12 +18,7 @@ export default class TaskListItem {
     this.taskWrapper = this.element.querySelector('.task-wrapper')
     
     this.taskCheckbox = this.element.querySelector('.task-checkbox')
-
-    if (completed) {
-      this.taskCheckbox.setAttribute('checked', '')
-    } else {
-      this.taskCheckbox.removeAttribute('checked')
-    }
+    this.taskCheckbox.checked = completed
 
     this.taskEditorButton = this.element.querySelector('.edit-task-button')
     
@@ -37,14 +32,7 @@ export default class TaskListItem {
 
   async updateTask() {
     const completed = this.taskCheckbox.checked
-
     await updateTask(this.taskId, completed)
-
-    if (completed) {
-      this.taskCheckbox.setAttribute('checked', '')
-    } else {
-      this.taskCheckbox.removeAttribute('checked')
-    }
   }
 
   openEditor() {
@@ -104,7 +92,37 @@ export default class TaskListItem {
     this.closeEditor()
   }
 
+  async confirmDeletion() {
+    const deletionDialog = document.getElementById('deletion-dialog')
+    const cancelDeletion = document.getElementById('cancel-deletion-button')
+    const confirmDeletion = document.getElementById('confirm-deletion-button')
+
+    cancelDeletion.addEventListener('click', (event) => {
+      deletionDialog.close(event.target.value)
+    })
+
+    confirmDeletion.addEventListener('click', (event) => {
+      deletionDialog.close(event.target.value)
+    })
+
+    deletionDialog.showModal()
+
+    const result = await new Promise((resolve) => {
+      deletionDialog.addEventListener('close', () => {
+        const value = deletionDialog.returnValue === 'confirm'
+        resolve(value)
+      })
+
+      deletionDialog.addEventListener('cancel', () => resolve(false))
+    })
+
+    return result
+  }
+
   async deleteTask() {
+    const deletionConfirmed = await this.confirmDeletion()
+    if (!deletionConfirmed) return
+
     await deleteTask(this.taskId)
     this.element.remove()
   }

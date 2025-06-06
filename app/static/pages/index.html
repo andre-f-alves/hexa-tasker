@@ -39,6 +39,16 @@
       </span>
     </template>
 
+    <dialog id="deletion-dialog">
+      <form method="dialog">
+        <p>Tem certeza que deseja excluir esta tarefa?</p>
+        <div>
+          <button type="button" value="cancel" id="cancel-deletion-button" class="dialog-button">Cancelar</button>
+          <button type="button" value="confirm" id="confirm-deletion-button" class="dialog-button">Confirmar</button>
+        </div>
+      </form>
+    </dialog>
+
   </ul>
 
   <form id="new-task-form">
