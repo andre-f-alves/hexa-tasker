@@ -32,7 +32,13 @@ export default class TaskListItem {
 
   async updateTask() {
     const completed = this.taskCheckbox.checked
-    await updateTask(this.taskId, completed)
+    const res = await updateTask(this.taskId, completed)
+    
+    if (res.error) {
+      alert(res.error)
+      this.taskCheckbox.checked = !completed
+      return
+    }
   }
 
   openEditor() {
@@ -79,15 +85,21 @@ export default class TaskListItem {
     const taskEditorInput = this.element.querySelector('.task-editor-input')
     const task = taskEditorInput.value.trim()
 
-    const { resFulfilled, resData } = await editTask(this.taskId, task)
+    const res = await editTask(this.taskId, task)
 
-    if (!resFulfilled) {
-      alert('Erro: ' + resData['error'])
+    if (res.error) {
+      alert(res.error)
+      this.closeEditor()
+      return
+    }
+
+    if (!res.resFulfilled) {
+      alert('Erro: ' + res.resData['error'])
       taskEditorInput.focus()
       return
     }
 
-    this.taskText.textContent = resData['task']
+    this.taskText.textContent = res.resData['task']
 
     this.closeEditor()
   }
@@ -123,7 +135,13 @@ export default class TaskListItem {
     const deletionConfirmed = await this.confirmDeletion()
     if (!deletionConfirmed) return
 
-    await deleteTask(this.taskId)
+    const res = await deleteTask(this.taskId)
+    
+    if (res.error) {
+      alert(res.error)
+      return
+    }
+
     this.element.remove()
   }
 

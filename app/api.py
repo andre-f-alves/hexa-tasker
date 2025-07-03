@@ -44,7 +44,7 @@ def create_task():
   task_id = db_cursor.lastrowid
   close_db()
 
-  return jsonify({'task_id': task_id, 'task': task_name, 'completed': True}), 201
+  return jsonify({'task_id': task_id, 'task': task_name, 'completed': False}), 201
 
 
 @bp.route('/update-task/<int:task_id>', methods=['PATCH'])

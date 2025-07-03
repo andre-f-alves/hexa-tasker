@@ -5,7 +5,7 @@ async function getTasks() {
   
   } catch (error) {
     console.error('Error fetching tasks:', error)
-    return { 'error': 'Falha ao buscar as tarefas.' }
+    return { error: 'Falha ao buscar as tarefas.' }
   }
 }
 
@@ -25,7 +25,7 @@ async function createTask(task) {
 
   } catch (error) {
     console.error('Error creating task:', error)
-    return { 'error': 'Falha ao criar a tarefa.' }
+    return { error: 'Falha ao criar a tarefa.' }
   }
 }
 
@@ -39,11 +39,13 @@ async function updateTask(taskId, completed) {
       body: JSON.stringify({'completed': completed})
     })
 
-    return await res.json()
+    const data = await res.json()
+
+    return { resFulfilled: res.ok, resStatus: res.status, resData: data }
 
   } catch (error) {
     console.error('Error updating task:', error)
-    return { 'error': 'Falha ao atualizar a tarefa.' }
+    return { error: 'Falha ao atualizar a tarefa.' }
   }
 }
 
@@ -63,7 +65,7 @@ async function editTask(taskId, task) {
 
   } catch (error) {
     console.error('Error editing task:', error)
-    return { 'error': 'Falha ao editar a tarefa.' }
+    return { error: 'Falha ao editar a tarefa.' }
   }
 }
 
@@ -78,7 +80,7 @@ async function deleteTask(taskId) {
   
   } catch (error) {
     console.error('Error deleting task:', error)
-    alert('Falha ao excluir a tarefa.')
+    return { error: 'Falha ao excluir a tarefa.'}
   }
 }
 

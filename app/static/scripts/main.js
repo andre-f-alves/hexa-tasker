@@ -65,15 +65,21 @@ async function handleTaskSubmit(event) {
   const taskInput = document.getElementById('new-task-input')
   const task = taskInput.value.trim()
 
-  const { resFulfilled, resData } = await createTask(task)
+  const res = await createTask(task)
+  console.log(res)
 
   taskInput.value = ''
   document.getElementById('submit-task').disabled = true
 
-  if (!resFulfilled) {
-    alert(`Error creating task: ${resData['error']}`)
+  if (res.error) {
+    alert(res.error)
     return
   }
 
-  addTask(resData['task'], resData['task_id'])
+  if (!res.resFulfilled) {
+    alert(`Error creating task: ${res.resData['error']}`)
+    return
+  }
+
+  addTask(res.resData['task'], res.resData['task_id'])
 }
