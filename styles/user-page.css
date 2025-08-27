@@ -1,0 +1,26 @@
+html, body {
+  height: 100dvh;
+}
+
+.task-wrapper.hidden {
+  display: none;
+}
+
+/* .new-task-form {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  display: flex;
+}
+
+.new-task-input {
+  flex-grow: 1;
+  padding: 8px;
+}
+
+.submit-task-button {
+  height: 100%;
+  aspect-ratio: 1 / 1;
+  padding: 8px;
+} */

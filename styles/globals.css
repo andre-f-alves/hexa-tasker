@@ -1,0 +1,17 @@
+:root {
+  --primary-color: #fe3600;
+  --error-color: #ff3737;
+}
+
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+  font-family: sans-serif;
+}
+
+button {
+  font-size: 1em;
+  border: none;
+  text-align: center;
+}

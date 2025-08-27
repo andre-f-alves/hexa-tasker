@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hexa Tasker</title>
+  <link rel="icon" href="favicon.ico" type="image/x-icon">
+  <link rel="stylesheet" href="styles/globals.css">
+  <link rel="stylesheet" href="styles/user-page.css">
+  <link rel="manifest" href="manifest.json">
+</head>
+<body>
+  <header>
+    <h1>Lista de Tarefas</h1>
+  </header>
+
+  <ul id="task-list">
+
+    <template id="task-list-item-template">
+      <li class="task-list-item">
+        <span class="task-wrapper">
+          <input type="checkbox" data-action="update-task" class="task-checkbox">
+        
+          <span class="task-description"></span>
+
+          <span class="task-actions">
+            <button type="button" data-action="open-editor" class="edit-task-button">Editar</button>
+            <button type="button" data-action="delete-task" class="delete-task-button">Excluir</button>
+          </span>
+        </span>
+      </li>
+    </template>
+
+    <template id="task-editor-template">
+      <span class="task-editor">
+        <form class="task-editor-form">
+          <input type="text" name="task-text" id="task-editor-input" placeholder="Digite sua tarefa" class="task-editor-input">
+          <span>
+            <button type="button" data-action="close-editor" class="cancel-button">Cancelar</button>
+            <button type="submit" data-action="save-edition" class="save-button">Salvar</button>
+          </span>
+        </form>
+      </span>
+    </template>
+
+    <dialog id="deletion-dialog">
+      <form method="dialog">
+        <p>Tem certeza que deseja excluir esta tarefa?</p>
+        <div>
+          <button type="button" value="cancel" id="cancel-deletion-button" class="dialog-button">Cancelar</button>
+          <button type="button" value="confirm" id="confirm-deletion-button" class="dialog-button">Confirmar</button>
+        </div>
+      </form>
+    </dialog>
+
+  </ul>
+
+  <div class="form-wrapper">
+    <form id="new-task-form" class="new-task-form">
+      <input type="text" name="new-task" id="new-task-input" class="new-task-input" placeholder="Digite uma tarefa">
+      <button type="submit" id="submit-task" class="submit-task-button" disabled>+</button>
+    </form>
+  </div>
+
+  <script type="module" src="scripts/main.js"></script>
+  <script type="module" src="scripts/task-list-renderer.js"></script>
+</body>
+</html>

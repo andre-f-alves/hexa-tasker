@@ -1,0 +1,38 @@
+<svg width="512" height="512" version="1.1" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="linearGradient117" x2="512" y1="512" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#900" offset=".20271"/>
+      <stop stop-color="#e53200" offset=".39683"/>
+      <stop stop-color="#fe5900" offset=".60081"/>
+      <stop stop-color="#feb300" offset=".79744"/>
+    </linearGradient>
+    <linearGradient id="linearGradient122" x2="512" y1="512" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#808080" offset=".35294"/>
+      <stop stop-color="#b2b2b2" offset=".54525"/>
+      <stop stop-color="#ccc" offset=".70249"/>
+      <stop stop-color="#e5e5e5" offset=".89593"/>
+    </linearGradient>
+    <filter id="filter167" x="-.036017" y="-.023704" width="1.0614" height="1.0573" color-interpolation-filters="sRGB">
+      <feFlood flood-color="rgb(0,0,0)" flood-opacity=".5" in="SourceGraphic" result="flood"/>
+      <feGaussianBlur in="SourceGraphic" result="blur" stdDeviation="4.000000"/>
+      <feOffset dx="-4" dy="4" in="blur" result="offset"/>
+      <feComposite in="flood" in2="offset" operator="in" result="comp1"/>
+      <feComposite in="SourceGraphic" in2="comp1" result="comp2"/>
+    </filter>
+    <filter id="filter169" x="-.050421" y="-.035591" width="1.086" height="1.086" color-interpolation-filters="sRGB">
+      <feFlood flood-color="rgb(0,0,0)" flood-opacity=".49804" in="SourceGraphic" result="flood"/>
+      <feGaussianBlur in="SourceGraphic" result="blur" stdDeviation="4"/>
+      <feOffset dx="-4.000000" dy="4.000000" in="blur" result="offset"/>
+      <feComposite in="flood" in2="offset" operator="in" result="comp1"/>
+      <feComposite in="SourceGraphic" in2="comp1" result="comp2"/>
+    </filter>
+  </defs>
+  <path d="m303.73 303.73-95.459-95.459 249.96-154.5zm19.77-47.73a67.5 67.5 45 0 1-67.5 67.5 67.5 67.5 45 0 1-67.5-67.5 67.5 67.5 45 0 1 67.5-67.5 67.5 67.5 45 0 1 67.5 67.5z" fill="url(#linearGradient122)" filter="url(#filter169)" stroke-width="25"/>
+  <g fill="url(#linearGradient117)" filter="url(#filter167)">
+    <path d="m419.4 147.84-13.15 21.275 0.12305 0.0723v173.63l-150.37 86.816-150.37-86.816v-173.63l150.37-86.816 64.488 37.232 24.148-14.926-88.637-51.174-175.37 101.25v202.5l175.37 101.25 175.37-101.25v-202.5z" stop-color="#000000"/>
+    <path d="m356.57 270.07 25-14.434v-46.613l-25 40.447z" stop-color="#000000"/>
+    <path d="m356.57 292.43 25-14.434v-10.812l-25 14.434z" stop-color="#000000"/>
+    <path d="m256 111-125.57 72.5v145l125.57 72.5 125.57-72.5v-38.955l-25 14.434v10.088l-100.57 58.066-100.57-58.066v-116.13l100.57-58.066 16.391 9.4629 24.146-14.926z" stop-color="#000000"/>
+    <path d="m256 256-58.457-33.75 58.457 101.25 202.23-269.73z"/>
+  </g>
+</svg>
