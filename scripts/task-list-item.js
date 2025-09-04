@@ -1,10 +1,10 @@
 import {
   updateTaskInIDB,
+  deleteTaskFromIDB
 } from './local-tasks-db.js'
 
 import {
   getTemplateContent,
-  registerSync
 } from './utils.js'
 
 export default class TaskListItem {
@@ -33,15 +33,13 @@ export default class TaskListItem {
 
   async updateTask() {
     const completed = this.taskCheckbox.checked
-    const idbResult = await updateTaskInIDB(this.taskId, { completed: completed, synced: false })
+    const idbResult = await updateTaskInIDB(this.taskId, { completed: completed })
     
     if (!idbResult || idbResult.error) {
       alert('Erro ao atualizar a tarefa no banco de dados local.')
       this.taskCheckbox.checked = !completed
       return
     }
-
-    registerSync('sync-tasks')
   }
 
   openEditor() {
@@ -88,15 +86,13 @@ export default class TaskListItem {
     const taskEditorInput = this.element.querySelector('.task-editor-input')
     const taskDescription = taskEditorInput.value.trim()
 
-    const idbResult = await updateTaskInIDB(this.taskId, { taskDescription: taskDescription, synced: false })
+    const idbResult = await updateTaskInIDB(this.taskId, { taskDescription: taskDescription })
 
     if (!idbResult || idbResult.error) {
       alert('Erro ao editar a tarefa no banco de dados local.')
       this.closeEditor()
       return
     }
-
-    registerSync('sync-tasks')
 
     this.taskDescription.textContent = idbResult.taskDescription
     this.closeEditor()
@@ -133,14 +129,12 @@ export default class TaskListItem {
     const deletionConfirmed = await this.confirmDeletion()
     if (!deletionConfirmed) return
 
-    const idbResult = await updateTaskInIDB(this.taskId, { deleted: true, synced: false })
+    const idbResult = await deleteTaskFromIDB(this.taskId)
     
     if (idbResult.error) {
       alert(idbResult.error)
       return
     }
-
-    registerSync('sync-tasks')
 
     this.element.remove()
   }

@@ -1,9 +1,3 @@
-import {
-  getTasksFromIDB,
-  updateTaskInIDB,
-  deleteTaskFromIDB
-} from './scripts/local-tasks-db.js'
-
 const CACHE_VERSION = 1
 const CACHE_NAME = `hexa-tasker-cache-v${CACHE_VERSION}`
 const FILES_TO_CACHE = [
@@ -11,6 +5,7 @@ const FILES_TO_CACHE = [
   '/index.html',
   '/scripts/main.js',
   '/scripts/local-tasks-db.js',
+  '/scripts/task-list.js',
   '/scripts/task-list-item.js',
   '/scripts/utils.js',
   '/styles/globals.css',

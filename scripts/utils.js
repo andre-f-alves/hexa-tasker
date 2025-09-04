@@ -4,12 +4,6 @@ function getTemplateContent(templateId, content) {
   return templateContent.querySelector(content)
 }
 
-function registerSync(tag) {
-  navigator.serviceWorker.ready
-    .then(registration => registration.sync.register(tag))
-    .catch(error => console.error('Service Worker sync registration failed:', error))
-}
-
 function renderElement(tag, parent, attributes = {}) {
   const fragment = document.createDocumentFragment()
   const element = document.createElement(tag)
@@ -29,6 +23,5 @@ function renderElement(tag, parent, attributes = {}) {
 
 export {
   getTemplateContent,
-  registerSync,
   renderElement
 }

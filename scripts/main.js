@@ -1,10 +1,8 @@
-import { renderTaskList } from './task-list-renderer.js'
 import {
-  registerSync,
-} from './utils.js'
-import TaskListItem from './task-list-item.js'
+  saveTaskToIDB
+} from './local-tasks-db.js'
 
-renderTaskList(document.getElementById('task-list'))
+import TaskList from './task-list.js'
 
 window.addEventListener('load', () => {
   if ('serviceWorker' in navigator) {
@@ -13,13 +11,12 @@ window.addEventListener('load', () => {
   }
 })
 
-function renderTask(taskDescription, taskId, completed=false) {
-  const taskList = document.getElementById('task-list')
-  const taskListItem = new TaskListItem(taskDescription, taskId, completed)
-  taskList.appendChild(taskListItem)
-}
+const taskListElement = document.getElementById('task-list')
+const taskList = new TaskList(taskListElement)
+taskList.init()
 
-async function handleTaskSubmit(event) {
+const newTaskForm = document.getElementById('new-task-form')
+newTaskForm.addEventListener('submit', async (event) => {
   event.preventDefault()
   
   const taskInput = document.getElementById('new-task-input')
@@ -29,19 +26,13 @@ async function handleTaskSubmit(event) {
     id: crypto.randomUUID(),
     taskDescription: taskDescription,
     completed: false,
-    synced: false,
-    deleted: false
   })
 
   taskInput.value = ''
   document.getElementById('submit-task').disabled = true
   
-  renderTask(idbResult.taskDescription, idbResult.id, idbResult.completed)
-  registerSync('sync-tasks')
-}
-
-const newTaskForm = document.getElementById('new-task-form')
-newTaskForm.addEventListener('submit', (event) => handleTaskSubmit(event))
+  taskList.addTask(idbResult.taskDescription, idbResult.id, idbResult.completed)
+})
 
 const taskInput = document.getElementById('new-task-input')
 taskInput.addEventListener('input', (event) => {
