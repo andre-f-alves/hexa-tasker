@@ -1,0 +1,47 @@
+.task-list {
+  width: 100%;
+}
+
+.task-list-item {
+  list-style: none;
+  width: 100%;
+  padding: .5em 1em;
+}
+
+.task-wrapper {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 1em;
+}
+
+.task-wrapper.hidden {
+  display: none;
+}
+
+.task-description {
+  width: 100%;
+  font-size: 1.1em;
+  text-wrap: wrap;
+  text-overflow: ellipsis;
+}
+
+.task-actions > button {
+  background: none;
+  cursor: pointer;
+}
+
+.icon-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.list-action-icon {
+  width: 1.2em;
+  height: 1.2em;
+}
+
+.delete-task-icon {
+  fill: red;
+}

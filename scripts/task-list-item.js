@@ -136,7 +136,12 @@ export default class TaskListItem {
       return
     }
 
-    this.element.remove()
+    const taskDeletionEvent = new CustomEvent('taskDeletion', {
+      detail: { taskId: this.taskId },
+      bubbles: true,
+    })
+
+    this.element.dispatchEvent(taskDeletionEvent)
   }
 
   parseAction(action) {
@@ -144,11 +149,13 @@ export default class TaskListItem {
   }
 
   handleClick(event) {
-    if (event.target.type === 'checkbox') return
-    
-    if (event.target.type === 'submit') event.preventDefault()
+    const element = event.target.closest('button')
 
-    const { action } = event.target.dataset
+    if (element.type === 'checkbox') return
+    
+    if (element.type === 'submit') event.preventDefault()
+
+    const { action } = element.dataset
     if (!action) return
 
     const method = this.parseAction(action)
